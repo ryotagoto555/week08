@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week08 memberList</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-950 text-white">
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-16 left-10 text-yellow-200 text-3xl opacity-70">✦</div>
+        <div class="absolute top-32 right-24 text-yellow-100 text-xl opacity-60">✧</div>
+        <div class="absolute bottom-32 left-20 text-yellow-200 text-2xl opacity-70">✦</div>
+        <div class="absolute bottom-20 right-12 text-yellow-100 text-4xl opacity-50">✧</div>
+    </div>
+
+    <header class="relative z-10 px-6 py-8">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-wide">MARVEL Character Gallery</h1>
+            <nav class="hidden md:flex gap-6 text-sm text-blue-100">
+                <a href="#" class="hover:text-yellow-200 transition">Home</a>
+                <a href="#characters" class="hover:text-yellow-200 transition">Characters</a>
+                <a href="https://www.tokyodisneyresort.jp/" class="hover:text-yellow-200 transition">Official</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="relative z-10 px-6 pt-8 pb-12">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="inline-block mb-5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-blue-100">✨ Welcome to the magical world ✨</p>
+            <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">MARVEL Characters</h2>
+            <p class="mt-5 text-blue-100 max-w-2xl mx-auto leading-relaxed">お気に入りのキャラクターをカテゴリごとに見つけよう。</p>
+        </div>
+    </section>
+
+    <main id="characters" class="relative z-10 px-6 pb-16">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-10 p-5 rounded-3xl bg-white/10 border border-white/20 backdrop-blur-md shadow-2xl">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="allBtn" class="filter-btn px-5 py-3 rounded-full bg-yellow-300 text-slate-900 font-bold hover:bg-yellow-200 transition shadow-lg" data-filter="all">全員</button>
+                    <button id="classicBtn" class="filter-btn px-5 py-3 rounded-full bg-white/10 border border-white/30 text-white font-bold hover:bg-white/20 transition" data-filter="classic">クラシック</button>
+                    <button id="heroBtn" class="filter-btn px-5 py-3 rounded-full bg-white/10 border border-white/30 text-white font-bold hover:bg-white/20 transition" data-filter="hero">ヒーロー</button>
+                    <button id="villainBtn" class="filter-btn px-5 py-3 rounded-full bg-white/10 border border-white/30 text-white font-bold hover:bg-white/20 transition" data-filter="villain">ヴィランズ</button>
+                </div>
+            </div>
+
+            <section id="characterList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></section>
+        </div>
+    </main>
+
+    <footer class="relative z-10 px-6 py-8 border-t border-white/10">
+        <div class="max-w-6xl mx-auto text-center text-sm text-blue-100">
+            <p>© 2026 Magic Character Gallery</p>
+        </div>
+    </footer>
+
+    <script>
+        const characters = [
+            {
+                name: " Iron Man",
+                category: "hero",
+                categoryLabel: "ヒーロー",
+                comment: "技術と勇気で戦う、頼れるエンジニア型ヒーロー。",
+                image: "./photo/ironman.jpeg"
+            },
+            {
+                name: "Captain America",
+                category: "hero",
+                categoryLabel: "ヒーロー",
+                comment: "正義と誠実さを体現する、信頼の象徴。",
+                image: "./photo/captain.jpeg"
+            },
+            {
+                name: "Thor",
+                category: "hero",
+                categoryLabel: "ヒーロー",
+                comment: "強さと優しさを兼ね備えた雷の神。",
+                image: "./photo/thor.jpeg"
+            },
+            {
+                name: "Hulk",
+                category: "hero",
+                categoryLabel: "ヒーロー",
+                comment: "怒りを制御しながら守る、力強い戦士。",
+                image: "./photo/hulk.jpeg"
+            },
+            {
+                name: "Spider-Man",
+                category: "hero",
+                categoryLabel: "ヒーロー",
+                comment: "人々を守るために、日々努力し続ける青年ヒーロー。",
+                image: "./photo/spiderman.jpeg"
+            },
+            {
+                name: "Thanos",
+                category: "villain",
+                categoryLabel: "ヴィラン",
+                comment: "宇宙を支配する執念と強大な力を持つ存在。",
+                image: "./photo/thanos.jpeg"
+            },
+            {
+                name: "Ultron",
+                category: "villain",
+                categoryLabel: "ヴィラン",
+                comment: "知性と破壊の力を持つ、恐れられる機械の支配者。",
+                image: "./photo/urtoron.jpeg"
+            }
+        ];
+
+        const characterList = document.querySelector('#characterList');
+        const buttons = document.querySelectorAll('.filter-btn');
+        const allBtn = document.querySelector('#allBtn');
+        const classicBtn = document.querySelector('#classicBtn');
+        const heroBtn = document.querySelector('#heroBtn');
+        const villainBtn = document.querySelector('#villainBtn');
+
+        function setActiveButton(activeButton) {
+            buttons.forEach((button) => {
+                const isActive = button === activeButton;
+                button.classList.toggle('bg-yellow-300', isActive);
+                button.classList.toggle('text-slate-900', isActive);
+                button.classList.toggle('border-white/30', !isActive);
+                button.classList.toggle('bg-white/10', !isActive);
+                button.classList.toggle('text-white', !isActive);
+                button.classList.toggle('shadow-lg', isActive);
+            });
+        }
+
+        function renderCharacters(characterArray) {
+            characterList.innerHTML = '';
+
+            characterArray.forEach((character) => {
+                const card = document.createElement('article');
+                card.className = 'rounded-3xl bg-white/10 border border-white/20 backdrop-blur-md overflow-hidden shadow-xl hover:-translate-y-2 hover:shadow-yellow-300/20 transition duration-300';
+                card.dataset.category = character.category;
+
+                card.innerHTML = `
+                    <div class="h-56 bg-gradient-to-br from-blue-200 to-indigo-300 flex items-center justify-center p-4">
+                        <img
+                            src="${character.image}"
+                            alt="${character.name}"
+                            class="w-40 h-40 rounded-full border-4 border-white shadow-lg object-cover bg-white/70 transition-transform duration-300 hover:scale-105"
+                            onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'w-40 h-40 rounded-full border-4 border-white bg-slate-900 text-4xl flex items-center justify-center\'>${character.name.charAt(0)}</div>'"
+                        >
+                    </div>
+                    <div class="p-5">
+                        <p class="text-xs text-yellow-200 mb-2">${character.categoryLabel}</p>
+                        <h3 class="text-xl font-bold mb-2">${character.name}</h3>
+                        <p class="text-sm text-blue-100 leading-relaxed">${character.comment}</p>
+                    </div>
+                `;
+
+                characterList.appendChild(card);
+            });
+        }
+
+        renderCharacters(characters);
+        setActiveButton(allBtn);
+
+        allBtn.addEventListener('click', () => {
+            renderCharacters(characters);
+            setActiveButton(allBtn);
+        });
+
+        classicBtn.addEventListener('click', () => {
+            const classic = characters.filter((character) => character.category === 'classic');
+            renderCharacters(classic);
+            setActiveButton(classicBtn);
+        });
+
+        heroBtn.addEventListener('click', () => {
+            const hero = characters.filter((character) => character.category === 'hero');
+            renderCharacters(hero);
+            setActiveButton(heroBtn);
+        });
+
+        villainBtn.addEventListener('click', () => {
+            const villain = characters.filter((character) => character.category === 'villain');
+            renderCharacters(villain);
+            setActiveButton(villainBtn);
+        });
+    </script>
+</body>
+</html>
+
+
+
